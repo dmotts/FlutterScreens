@@ -1,4 +1,148 @@
 import 'package:flutter/material.dart';
+import 'slide_list_view.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'graph.dart';
+
+class MiscShowcase extends StatelessWidget {
+  void _launchURL() async {
+    const url = 'https://github.com/The-Young-Programer/FlutterScreens';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Widget _buildSection(
+      String title, String description, Widget component, String codeSnippet) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue[900],
+          ),
+        ),
+        SizedBox(height: 8),
+        Text(
+          description,
+          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 16),
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: component,
+        ),
+        Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: Text(
+            codeSnippet,
+            style: TextStyle(fontFamily: 'monospace', fontSize: 14),
+          ),
+        ),
+        Divider(height: 32),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Misc Components'),
+        actions: [
+          ElevatedButton.icon(
+            onPressed: _launchURL,
+            icon: Icon(Icons.code),
+            label: Text('View Code'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSection(
+              'Rating Widget',
+              'A customizable star rating widget with tap and drag functionality',
+              Rating(
+                initialRating: 3,
+                onRated: (rating) {
+                  print('Rating: $rating');
+                },
+              ),
+              '''Rating(
+  initialRating: 3,
+  onRated: (rating) {
+    print('Rating: \$rating');
+  },
+)''',
+            ),
+            _buildSection(
+              'Slide List View',
+              'A widget that toggles between two views with a 3D rotation animation',
+              Container(
+                height: 300,
+                child: SlideListView(
+                  view1: Container(
+                    color: Colors.blue[100],
+                    child: Center(child: Text('View 1')),
+                  ),
+                  view2: Container(
+                    color: Colors.green[100],
+                    child: Center(child: Text('View 2')),
+                  ),
+                  showFloatingActionButton: true,
+                  enabledSwipe: true,
+                ),
+              ),
+              '''SlideListView(
+  view1: YourFirstView(),
+  view2: YourSecondView(),
+  showFloatingActionButton: true,
+  enabledSwipe: true,
+  floatingActionButtonColor: Colors.blue,
+  floatingActionButtonIcon: AnimatedIcons.view_list,
+  duration: Duration(milliseconds: 400),
+)''',
+            ),
+            _buildSection(
+              'Animated Graph',
+              'An animated sine wave graph with a moving dot',
+              Container(
+                height: 300,
+                child: Graph(),
+              ),
+              '''Graph(
+  // Animated sine wave graph with moving dot
+  // Uses CustomPaint and AnimationController
+  // See graph.dart for implementation details
+)''',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class Rating extends StatefulWidget {
   final int? initialRating;
@@ -52,23 +196,28 @@ class _RatingState extends State<Rating> {
         _isDragging = true;
       },
       onHorizontalDragUpdate: (DragUpdateDetails details) {
-        RenderBox? star1 = _starOneKey.currentContext!.findRenderObject() as RenderBox?;
+        RenderBox? star1 =
+            _starOneKey.currentContext!.findRenderObject() as RenderBox?;
         final Offset positionStar1 = star1!.localToGlobal(Offset.zero);
         final sizeStar1 = star1.size;
 
-        RenderBox? star2 = _starTwoKey.currentContext!.findRenderObject() as RenderBox?;
+        RenderBox? star2 =
+            _starTwoKey.currentContext!.findRenderObject() as RenderBox?;
         final positionStar2 = star2!.localToGlobal(Offset.zero);
         final sizeStar2 = star2.size;
 
-        RenderBox? star3 = _starThreeKey.currentContext!.findRenderObject() as RenderBox?;
+        RenderBox? star3 =
+            _starThreeKey.currentContext!.findRenderObject() as RenderBox?;
         final positionStar3 = star3!.localToGlobal(Offset.zero);
         final sizeStar3 = star3.size;
 
-        RenderBox? star4 = _starFourKey.currentContext!.findRenderObject() as RenderBox?;
+        RenderBox? star4 =
+            _starFourKey.currentContext!.findRenderObject() as RenderBox?;
         final positionStar4 = star4!.localToGlobal(Offset.zero);
         final sizeStar4 = star4.size;
 
-        RenderBox? star5 = _starFiveKey.currentContext!.findRenderObject() as RenderBox?;
+        RenderBox? star5 =
+            _starFiveKey.currentContext!.findRenderObject() as RenderBox?;
         final positionStar5 = star5!.localToGlobal(Offset.zero);
         final sizeStar5 = star5.size;
 
